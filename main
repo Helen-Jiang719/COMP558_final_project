@@ -1,0 +1,32 @@
+import os
+from PIL import Image
+
+# Set the paths
+input_folder = 'data/raw/'           # Folder containing the original images
+output_folder = 'data/processed/'     # Folder to store the processed images
+target_size = (800, 600)              # Target size for resizing (width, height)
+
+# Ensure the output folder exists
+os.makedirs(output_folder, exist_ok=True)
+
+def preprocess_images(input_folder, output_folder):
+    for filename in os.listdir(input_folder):
+        # Process only image files
+        if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.tiff')): #TODO: change later
+            try:
+                # Open the image
+                img_path = os.path.join(input_folder, filename)
+                with Image.open(img_path) as img:
+                    # Resize the image
+                    img = img.resize(target_size, Image.ANTIALIAS)
+                    
+                    # Save the processed image in the output folder
+                    processed_path = os.path.join(output_folder, filename)
+                    img.save(processed_path)
+                    print(f"Processed and saved: {processed_path}")
+            
+            except Exception as e:
+                print(f"Failed to process {filename}: {e}")
+
+# Run the preprocessing function
+preprocess_images(input_folder, output_folder)
