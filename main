@@ -9,7 +9,7 @@ output_folder = 'data/processed/'     # Folder to store the processed images
 target_size = (800, 600)              # Target size for resizing (width, height)
 
 # Ensure output folders exist
-os.makedirs(processed_folder, exist_ok=True)
+os.makedirs(output_folder, exist_ok=True)
 
 
 def preprocess_images(input_folder, output_folder):
