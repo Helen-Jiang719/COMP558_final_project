@@ -1,6 +1,19 @@
 import cv2
 import numpy as np
 
+def poisson_blend(src, dst, mask, center):
+    """
+    Perform Poisson blending on the overlapping region.
+
+    :param src: Source image (part to be blended)
+    :param dst: Destination image (base image)
+    :param mask: Binary mask of the region to blend
+    :param center: Center of the blending region in the destination image
+    :return: Blended image
+    """
+    return cv2.seamlessClone(src, dst, mask, center, cv2.NORMAL_CLONE)
+
+
 def stitch_vertical(images):
     """
     Stitch multiple images vertically into a seamless panorama.
@@ -19,7 +32,32 @@ def stitch_vertical(images):
 
     if status != cv2.Stitcher_OK:
         raise Exception(f"Stitching failed with status code {status}")
+    # Manually apply Poisson blending to smooth transitions
+    for i in range(len(images) - 1):
+        src = images[i + 1]
+        dst = panorama
 
+        # Define an overlapping region (adjust coordinates as needed)
+        overlap_start = max(0, dst.shape[0] - src.shape[0])  # Adjust as needed
+        overlap_end = dst.shape[0]
+
+        # Extract regions
+        src_overlap = src[:overlap_end - overlap_start, :]
+        dst_overlap = dst[overlap_start:overlap_end, :]
+
+        # Create a binary mask for the source overlap
+        mask = np.zeros_like(src_overlap, dtype=np.uint8)
+        mask[:, :] = 255  # Entire overlap area is part of the mask
+
+        # Center the blending area (adjust this for more precise control)
+        center = (dst_overlap.shape[1] // 2, dst_overlap.shape[0] // 2)
+
+        # Blend the overlapping regions
+        blended = poisson_blend(src_overlap, dst_overlap, mask, center)
+
+        # Replace the blended region in the panorama
+        panorama[overlap_start:overlap_end, :] = blended
+        
     return panorama
 
 
