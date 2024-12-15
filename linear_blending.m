@@ -1,4 +1,4 @@
-%% FEATHERING BLENDING
+%% LINEAR BLENDING
 clear; clc; close all;
 numImages = 3;
 img = cell(1, numImages);
