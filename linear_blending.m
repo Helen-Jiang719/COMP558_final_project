@@ -4,7 +4,7 @@ numImages = 3;
 img = cell(1, numImages);
 imgGray = cell(1, numImages);
 for i = 1:numImages
-    img{i} = imread(fullfile('NSH/', sprintf('medium0%d.jpg', i)));
+    img{i} = imread(fullfile('data/raw/NSH/', sprintf('medium0%d.jpg', i)));
 end
 
 % Converting images to grayscale 
