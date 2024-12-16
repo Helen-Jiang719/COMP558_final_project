@@ -195,15 +195,6 @@ end
 
 
 function [blendedPanorama] = poissonBlendPanorama(panorama, numImages, img, HRef, viewpoint)
-    % Poisson blending for panorama creation
-    % Inputs:
-    %   panorama - Initial panorama image
-    %   numImages - Number of images in the panorama
-    %   img - Cell array of original images
-    %   HRef - Cell array of homography transformations
-    %   viewpoint - Image reference object for panorama coordinates
-    % Output:
-    %   blendedPanorama - Final blended panorama
 
     % Initialize blended panorama
     blendedPanorama = panorama;
@@ -228,15 +219,8 @@ function [blendedPanorama] = poissonBlendPanorama(panorama, numImages, img, HRef
     end
 end
 
+% Warp the input image into the panorama space
 function [warpedImage, warpedMask] = warpImageToPanorama(image, H, viewpoint)
-    % Warp the input image into the panorama space
-    % Inputs:
-    %   image - Input image
-    %   H - Homography matrix
-    %   viewpoint - Reference object for panorama coordinates
-    % Outputs:
-    %   warpedImage - Warped image in panorama space
-    %   warpedMask - Mask indicating valid regions of the warped image
 
     % Warp the image using the homography
     tform = projective2d(H');
@@ -247,14 +231,8 @@ function [warpedImage, warpedMask] = warpImageToPanorama(image, H, viewpoint)
     warpedMask = imwarp(mask, tform, 'OutputView', viewpoint);
 end
 
+% Poisson blending on a single channel
 function blended = poissonBlend(panorama, foreground, mask)
-    % Perform Poisson blending on a single channel
-    % Inputs:
-    %   panorama - Current panorama channel
-    %   foreground - Warped image channel
-    %   mask - Binary mask of the foreground
-    % Output:
-    %   blended - Blended result for the single channel
 
     % Ensure the mask is logical
     mask = logical(mask);
