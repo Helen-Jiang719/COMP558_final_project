@@ -193,7 +193,7 @@ function [consensusSet, InliersNum] = computeInliers(H, pts1, pts2, threshold)
 end
 
 
-
+% function to blend the whole panorama
 function [blendedPanorama] = poissonBlendPanorama(panorama, numImages, img, HRef, viewpoint)
 
     % Initialize blended panorama
@@ -219,7 +219,7 @@ function [blendedPanorama] = poissonBlendPanorama(panorama, numImages, img, HRef
     end
 end
 
-% Warp the input image into the panorama space
+% function to warp the input image into the panorama canvas
 function [warpedImage, warpedMask] = warpImageToPanorama(image, H, viewpoint)
 
     % Warp the image using the homography
@@ -237,7 +237,7 @@ function blended = poissonBlend(panorama, foreground, mask)
     % Ensure the mask is logical
     mask = logical(mask);
 
-    % Find the region of interest (ROI) in the mask
+    % Find the region of interest in the mask
     [rows, cols] = find(mask);
     minRow = min(rows); maxRow = max(rows);
     minCol = min(cols); maxCol = max(cols);
@@ -284,14 +284,13 @@ function blended = poissonBlend(panorama, foreground, mask)
         end
     end
 
-    % Solve the linear system
+    % solve the system
     x = A \ b;
 
-    % Reshape the solution back to the image size
+    % reshape the solution back to the image size
     blendedRegion = zeros(h, w);
     blendedRegion(croppedMask) = x;
 
-    % Place the blended region back into the panorama
     blended = panorama;
     blended(minRow:maxRow, minCol:maxCol) = blendedRegion;
 end
