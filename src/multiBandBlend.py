@@ -17,8 +17,11 @@ def read_images(image_paths):
 if __name__ == "__main__":
 
     image_paths = [
-   "data/raw/NSH/medium01.jpg",  
-    "data/raw/NSH/medium02.jpg",
+        
+
+       "data/raw/vertical/4.jpg",   
+      "data/raw/vertical/5.jpg", 
+      "data/raw/vertical/6.jpg", 
 ]
     try:
         images = read_images(image_paths)
